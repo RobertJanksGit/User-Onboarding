@@ -1,22 +1,23 @@
 // ❗ The ✨ TASKS inside this component are NOT IN ORDER.
 // ❗ Check the README for the appropriate sequence to follow.
-import React from 'react'
+import React from "react";
 
-const e = { // This is a dictionary of validation error messages.
+const e = {
+  // This is a dictionary of validation error messages.
   // username
-  usernameRequired: 'username is required',
-  usernameMin: 'username must be at least 3 characters',
-  usernameMax: 'username cannot exceed 20 characters',
+  usernameRequired: "username is required",
+  usernameMin: "username must be at least 3 characters",
+  usernameMax: "username cannot exceed 20 characters",
   // favLanguage
-  favLanguageRequired: 'favLanguage is required',
-  favLanguageOptions: 'favLanguage must be either javascript or rust',
+  favLanguageRequired: "favLanguage is required",
+  favLanguageOptions: "favLanguage must be either javascript or rust",
   // favFood
-  favFoodRequired: 'favFood is required',
-  favFoodOptions: 'favFood must be either broccoli, spaghetti or pizza',
+  favFoodRequired: "favFood is required",
+  favFoodOptions: "favFood must be either broccoli, spaghetti or pizza",
   // agreement
-  agreementRequired: 'agreement is required',
-  agreementOptions: 'agreement must be accepted',
-}
+  agreementRequired: "agreement is required",
+  agreementOptions: "agreement must be accepted",
+};
 
 // ✨ TASK: BUILD YOUR FORM SCHEMA HERE
 // The schema should use the error messages contained in the object above.
@@ -31,25 +32,27 @@ export default function App() {
   // Whenever the state of the form changes, validate it against the schema
   // and update the state that tracks whether the form is submittable.
 
-  const onChange = evt => {
+  const onChange = (evt) => {
     // ✨ TASK: IMPLEMENT YOUR INPUT CHANGE HANDLER
     // The logic is a bit different for the checkbox, but you can check
     // whether the type of event target is "checkbox" and act accordingly.
     // At every change, you should validate the updated value and send the validation
     // error to the state where we track frontend validation errors.
-  }
+  };
 
-  const onSubmit = evt => {
+  const onSubmit = (evt) => {
     // ✨ TASK: IMPLEMENT YOUR SUBMIT HANDLER
     // Lots to do here! Prevent default behavior, disable the form to avoid
     // double submits, and POST the form data to the endpoint. On success, reset
     // the form. You must put the success and failure messages from the server
     // in the states you have reserved for them, and the form
     // should be re-enabled.
-  }
+  };
 
   return (
-    <div> {/* TASK: COMPLETE THE JSX */}
+    <div>
+      {" "}
+      {/* TASK: COMPLETE THE JSX */}
       <h2>Create an Account</h2>
       <form>
         <h4 className="success">Success! Welcome, new user!</h4>
@@ -57,7 +60,12 @@ export default function App() {
 
         <div className="inputGroup">
           <label htmlFor="username">Username:</label>
-          <input id="username" name="username" type="text" placeholder="Type Username" />
+          <input
+            id="username"
+            name="username"
+            type="text"
+            placeholder="Type Username"
+          />
           <div className="validation">username is required</div>
         </div>
 
@@ -100,5 +108,5 @@ export default function App() {
         </div>
       </form>
     </div>
-  )
+  );
 }

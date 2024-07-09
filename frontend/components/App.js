@@ -7,14 +7,14 @@ import * as yup from "yup";
 const initialFormValues = {
   username: "",
   favLanguage: "",
-  pizza: false,
-  spaghetti: false,
-  broccoli: false,
+  favFood: "",
   agreement: false,
 };
 const initialFormErrors = {
   username: "",
   favLanguage: "",
+  favFood: "",
+  agreement: false,
 };
 const initialDisabled = true;
 
@@ -26,11 +26,14 @@ const formSchema = yup.object().shape({
     .min(3, "Username must be 3 characters long!"),
   favLanguage: yup
     .string()
-    .oneOf(["javascrip", "rust"], "Favorit language is required!"),
-  pizza: yup.boolean(),
-  spaghetti: yup.boolean(),
-  broccoli: yup.boolean(),
-  agreement: yup.boolean(),
+    .oneOf(["javascript", "rust"], "Favorit language is required!"),
+  favFood: yup
+    .string()
+    .oneOf(
+      ["pizza", "spaghetti", "broccoli"],
+      "a favorite food must be selected"
+    ),
+  agreement: yup.boolean().oneOf([true], "the agreement must be accepted"),
 });
 
 export default function App() {
@@ -47,16 +50,26 @@ export default function App() {
   };
 
   const onSubmit = (evt) => {
-    console.log(evt);
+    evt.preventDefault();
+    axios
+      .post("https://webapis.bloomtechdev.com/registration", formValues)
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => console.error(err))
+      .finally(() => setFormValues(initialFormValues));
   };
 
   const onChange = (evt) => {
     const { name, value, checked, type } = evt.target;
-    console.log(checked);
     const valueToUse = type === "checkbox" ? checked : value;
     validate(name, valueToUse);
     setFormValues({ ...formValues, [name]: valueToUse });
   };
+
+  useEffect(() => {
+    formSchema.isValid(formValues).then((valid) => setDisabled(!valid));
+  }, [formValues]);
 
   return (
     <div id="root">
@@ -64,14 +77,14 @@ export default function App() {
         <h2>Crate an Account</h2>
         <form onSubmit={onSubmit}>
           <div className="inputGroup">
-            <label form="username">Username:</label>
+            <label htmlFor="username">Username:</label>
             <input
               id="username"
               name="username"
               type="text"
               placeholder="Type Username"
               onChange={onChange}
-              value={formValues.name}
+              value={formValues.username}
             />
             {!!formValues.username && formValues.username.length < 3 && (
               <div className="validation">{formErrors.username}</div>
@@ -107,20 +120,35 @@ export default function App() {
           </div>
           <div className="inputGroup">
             <label htmlFor="favFood">Favorite Food:</label>
-            <select id="favFood" name="favFood">
-              <option value="">-- Select Favorit Food --</option>
+            <select
+              onChange={onChange}
+              value={formValues.favFood}
+              id="favFood"
+              name="favFood"
+            >
+              <option value="">-- Select Favorite Food --</option>
               <option value="pizza">Pizza</option>
               <option value="spaghetti">Spaghetti</option>
               <option value="broccoli">Broccoli</option>
             </select>
-            <div className="validation">a favorite food must be selected</div>
+            {!formValues.favFood && (
+              <div className="validation">a favorite food must be selected</div>
+            )}
           </div>
           <div className="inputGroup">
-            <label htmlFor="agreement">
-              <input id="agreement" type="checkbox" name="agreement" />
+            <label onChange={onChange} htmlFor="agreement">
+              <input
+                id="agreement"
+                type="checkbox"
+                name="agreement"
+                onChange={onChange}
+                checked={formValues.agreement}
+              />
               Agree to our terms
             </label>
-            <div className="validation">the agreement must be accepted</div>
+            {!formValues.agreement && (
+              <div className="validation">the agreement must be accepted</div>
+            )}
           </div>
           <div>
             <input disabled={disabled} type="submit" />
